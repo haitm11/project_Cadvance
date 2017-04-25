@@ -1,5 +1,5 @@
-#include"SAD.h"
-
+#include "SAD.h"
+#define MAXLEN 100
 void *show_meaning(char *meaning){
   FILE *stream;
   GtkTextIter iter;
@@ -51,18 +51,20 @@ void *show_meaning(char *meaning){
 
 gboolean display(GtkWidget *entryword,gpointer database){
   GtkWidget *dialog,*window=mainwindow;
-  char word[50],mean[10000];
-  int value;
+  //char word[50],mean[10000];
+  char word[MAXLEN],mean[MAXLEN];
+  int value,x;
   strcpy(word,(char *)gtk_entry_get_text(GTK_ENTRY(entryword)));
   if (strlen(word) == 0) {
     strcpy(mean,"Bạn chưa nhập từ vào ô tìm kiếm!");
     }
-    else{
-  if (strcmp(word,"linh")==0){ //doan nay la doan anh tim tu trong csdl
-    strcpy(mean,"Xin chao Linh\n");
-  }else{
-    strcpy(mean,"Xin lỗi! Không tìm thấy từ này trong dữ liệu\n");
-  }
+  else{
+    if(btsel(data, word, mean, MAXLEN*sizeof(char), &x)!=0) {
+          strcpy(mean,"Xin lỗi! Không tìm thấy từ này trong dữ liệu\n");  
+    } 
+    else {
+          // printf("nghia: %s\n", mean);
+    }    
   }
   show_meaning(mean);
 }

@@ -1,9 +1,13 @@
-#include<gtk/gtk.h>
-#include"btree.h"
-#include<string.h>
-#include"ADS.h"
-#include"SAD.h"
-#include"dialog.h"
+#include <gtk/gtk.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "btree.h"
+#include <string.h>
+#include "ADS.h"
+#include "SAD.h"
+#include "dialog.h"
+#define MAXLEN 100
 
 BTA *data;
 GtkWidget *textView,*mainwindow;
@@ -31,7 +35,45 @@ GdkPixbuf *create_pixbuf(const gchar *filename){
   }
   return pixbuf;
 }
-
+int AddWordToDic(BTA *Dic,char *w,char *m)
+{
+    int rsize,k=0,i;
+    if(btsel(Dic,w,m,MAXLEN*sizeof(char),&rsize)==0) {
+        return 0;
+    } else {
+        btins(Dic,w,m,MAXLEN*sizeof(char)); 
+    }
+    return 1;
+}
+void FileDeleteRow(char* filename,char* word){
+  FILE *fp1,*fp2;
+  char c,buffer[201];
+  int i=0,position;  
+  fp1 = fopen(filename, "r");  
+  fp2 = fopen("copy.c", "w");  
+  c = getc(fp1);
+  while (c != EOF) {    
+    if(c=='#') position=i;
+    buffer[i++]=c;    
+    if (c == '\n'){
+      buffer[i]='\0';      
+      buffer[position]='\0';
+      if (strcmp(word,buffer)!=0){
+        buffer[position]='#';        
+        fputs(buffer,fp2);
+      }      
+      i=0;
+    }      
+    c = getc(fp1);
+  }
+  //close both the files.
+  fclose(fp1);
+  fclose(fp2);
+  //remove original file
+  remove(filename);
+  //rename the file copy.c to original name
+  rename("copy.c", filename);
+}
 int main(int argc,char *argv[]){
   GtkWidget *window,*mainvbox,*hbox,*vbox;
   GtkWidget *button,*entry,*label,*frame;
@@ -39,6 +81,24 @@ int main(int argc,char *argv[]){
   // Khoi tao giao dien
   gtk_init(&argc,&argv);
   //neu anh co them data thi them o day nhe!
+  char word[MAXLEN], mean[MAXLEN],btree_filename[10]="testBTree",source_text_filename[100]="test.txt";
+  FILE *f;  
+
+  btinit();
+  //co the truyen file text theo tham so dong lenh:
+  if(argc >= 3) {
+    strcpy(source_text_filename,argv[1]);
+    strcpy(btree_filename,argv[2]);
+  }
+  data = btopn(btree_filename,0,0);   
+  if(data == NULL) data = btcrt(btree_filename,0,FALSE);  
+  f=fopen(source_text_filename,"r");
+  if(!f) {printf("Cannot open file %s \n",source_text_filename );exit(1);}
+  while(!feof(f)) {
+      fscanf(f,"%[^#]#%[^\n]\n",word,mean);
+      AddWordToDic(data,word,mean);
+    }
+  fclose(f);
   //data=btopn("AnhViet.dat",0,FALSE);
   window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_size_request(window,800,600);
