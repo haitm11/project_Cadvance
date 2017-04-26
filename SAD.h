@@ -1,6 +1,6 @@
-#include"extern.h"
-#include<string.h>
-#include<gdk/gdkkeysyms.h>
+#include "extern.h"
+#include <string.h>
+#include <gdk/gdkkeysyms.h>
 
 void *showmeaning(char *meaning);
 gboolean display(GtkWidget *entryword,gpointer database);

@@ -12,6 +12,7 @@
 BTA *data;
 GtkWidget *textView,*mainwindow;
 GtkTextBuffer *buffer;
+char source_text_filename[100]="test.txt";
 
 // Tao button voi icon va label
 GtkWidget* gtk_button_with_icon_and_label(char* label,char* fileimage){
@@ -35,45 +36,6 @@ GdkPixbuf *create_pixbuf(const gchar *filename){
   }
   return pixbuf;
 }
-int AddWordToDic(BTA *Dic,char *w,char *m)
-{
-    int rsize,k=0,i;
-    if(btsel(Dic,w,m,MAXLEN*sizeof(char),&rsize)==0) {
-        return 0;
-    } else {
-        btins(Dic,w,m,MAXLEN*sizeof(char)); 
-    }
-    return 1;
-}
-void FileDeleteRow(char* filename,char* word){
-  FILE *fp1,*fp2;
-  char c,buffer[201];
-  int i=0,position;  
-  fp1 = fopen(filename, "r");  
-  fp2 = fopen("copy.c", "w");  
-  c = getc(fp1);
-  while (c != EOF) {    
-    if(c=='#') position=i;
-    buffer[i++]=c;    
-    if (c == '\n'){
-      buffer[i]='\0';      
-      buffer[position]='\0';
-      if (strcmp(word,buffer)!=0){
-        buffer[position]='#';        
-        fputs(buffer,fp2);
-      }      
-      i=0;
-    }      
-    c = getc(fp1);
-  }
-  //close both the files.
-  fclose(fp1);
-  fclose(fp2);
-  //remove original file
-  remove(filename);
-  //rename the file copy.c to original name
-  rename("copy.c", filename);
-}
 int main(int argc,char *argv[]){
   GtkWidget *window,*mainvbox,*hbox,*vbox;
   GtkWidget *button,*entry,*label,*frame;
@@ -81,7 +43,7 @@ int main(int argc,char *argv[]){
   // Khoi tao giao dien
   gtk_init(&argc,&argv);
   //neu anh co them data thi them o day nhe!
-  char word[MAXLEN], mean[MAXLEN],btree_filename[10]="testBTree",source_text_filename[100]="test.txt";
+  char word[MAXLEN], mean[MAXLEN],btree_filename[10]="testBTree";
   FILE *f;  
 
   btinit();

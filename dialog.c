@@ -5,7 +5,7 @@ gboolean show_info(GtkWidget *widget,gpointer database){
   GtkWidget *dialog=gtk_about_dialog_new();
   gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog),"Từ điển tên-email");
   gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog),"Version 0.0");
-  gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),"(c) Việt Nhật K58\nNguyen Dinh Hung 20131879\nTran Minh Hai 20131271\nTran Thi Dieu Linh 20132320\nNguyen Dinh Chinh 20111243\nTran Dinh Tai 2015xxxx\n");
+  gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),"(c) Việt Nhật \nNguyễn Đình Hùng 20131879\nTrần Minh Hải 20131271\nTrần Thị Diệu Linh 20132320\nNguyễn Đình Chính 20111243\nTrịnh Đình Tài 20143926\n");
   gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog),"Chương trình được tham khảo code từ trang zetcode.com\n");
   gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog),pixbuf);
   g_object_unref(pixbuf),pixbuf=NULL;
