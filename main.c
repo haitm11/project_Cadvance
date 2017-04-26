@@ -99,7 +99,7 @@ int main(int argc,char *argv[]){
       AddWordToDic(data,word,mean);
     }
   fclose(f);
-  //data=btopn("AnhViet.dat",0,FALSE);
+
   window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_size_request(window,800,600);
   gtk_container_set_border_width(GTK_CONTAINER(window),10);
@@ -147,6 +147,12 @@ int main(int argc,char *argv[]){
   hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0);
   vbox=gtk_box_new(TRUE,1);
 
+  ins=gtk_button_with_icon_and_label("Thêm từ","add.ico");
+  g_signal_connect(ins,"clicked",G_CALLBACK(insert_word),(gpointer)entry);
+
+  del=gtk_button_with_icon_and_label("Xóa từ","delete.ico");
+  g_signal_connect(del,"clicked",G_CALLBACK(delete_word),(gpointer)entry);
+
   gui=gtk_button_with_icon_and_label("Hướng dẫn","huongdan.ico");
   g_signal_connect(gui,"clicked",G_CALLBACK(show_guide),(gpointer)entry);
 
@@ -156,6 +162,8 @@ int main(int argc,char *argv[]){
   clear=gtk_button_with_icon_and_label("Khôi phục","clear.jpg");
   g_signal_connect(clear,"clicked",G_CALLBACK(clearAll),(gpointer)entry);
 
+  gtk_box_pack_start(GTK_BOX(vbox),ins,TRUE,TRUE,0);
+  gtk_box_pack_start(GTK_BOX(vbox),del,TRUE,TRUE,0);
   gtk_box_pack_start(GTK_BOX(vbox),gui,TRUE,TRUE,0);
   gtk_box_pack_start(GTK_BOX(vbox),info,TRUE,TRUE,0);
   gtk_box_pack_start(GTK_BOX(vbox),clear,TRUE,TRUE,0);
