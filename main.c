@@ -118,10 +118,10 @@ int main(int argc,char *argv[]){
   gui=gtk_button_with_icon_and_label("Hướng dẫn","huongdan.ico");
   g_signal_connect(gui,"clicked",G_CALLBACK(show_guide),(gpointer)entry);
 
-  info=gtk_button_with_icon_and_label("Thông tin","thongtin.ico");
+  info=gtk_button_with_icon_and_label("Thông tin","thongtin.png");
   g_signal_connect(info,"clicked",G_CALLBACK(show_info),(gpointer)entry);
 
-  clear=gtk_button_with_icon_and_label("Khôi phục","clear.jpg");
+  clear=gtk_button_with_icon_and_label("Khôi phục","clear.png");
   g_signal_connect(clear,"clicked",G_CALLBACK(clearAll),(gpointer)entry);
 
   gtk_box_pack_start(GTK_BOX(vbox),ins,TRUE,TRUE,0);
