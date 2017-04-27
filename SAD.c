@@ -92,23 +92,34 @@ gboolean searchword(GtkWidget *entryword,GdkEvent *event,gpointer listword){
   if (key->keyval==GDK_KEY_Tab){
     strcpy(text,gtk_entry_get_text(GTK_ENTRY(entryword)));
     if (bfndky(data,text,&value)==QNOKEY){
-      // ham bnxtky tim key gan nhat voi key muon tim (em dung thu vien libbt)
+      // ham bnxtky tim key gan nhat voi key muon tim
       bnxtky(data,near_word,&value);
       if (isPrefix(text,near_word)){
-        gtk_entry_set_text(GTK_ENTRY(entryword),near_word);
-        gtk_editable_set_position(GTK_EDITABLE(entryword),strlen(near_word));
+  gtk_entry_set_text(GTK_ENTRY(entryword),near_word);
+  gtk_editable_set_position(GTK_EDITABLE(entryword),strlen(near_word));
       }
       else return TRUE;
     }
     display(entryword,NULL);
     return TRUE;
   }
-//end xu ly tab
-
   else{
+    //count=0;
     strcpy(text,gtk_entry_get_text(GTK_ENTRY(entryword)));
-    //ham xu ly cua anh, cai text la cai lay dk
-
+    if (key->keyval!=GDK_KEY_BackSpace){
+        len=strlen(text);
+      text[len]=key->keyval;
+      text[len+1]='\0';
+    }
+    bfndky(data,text,&value);
+    bnxtky(data,near_word,&value);
+    gtk_list_store_clear(liststore);
+    while ((isPrefix(text,near_word)!=0) && (count < 10)){
+      gtk_list_store_append(liststore,&iter);
+      gtk_list_store_set(liststore,&iter,0,near_word,-1);
+      bnxtky(data,near_word,&value);
+      count++;
+    }
     return FALSE;
   }
 }
