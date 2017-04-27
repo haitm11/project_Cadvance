@@ -42,6 +42,12 @@ void FileDeleteRow(char* filename,char* word){
   //rename the file copy.c to original name
   rename("copy.c", filename);
 }
+char* createBtreeFilename(){
+  char *str=strdup(source_text_filename);
+  char *p=str;
+  while(*p!='.')p++; *p='\0';
+  return str;
+}
 gboolean insert_word(GtkWidget *widget,gpointer entry){
   GtkWidget *dialog,*window=mainwindow;
   char word[MAXLEN],meaning[MAXLEN];//bien meaning de luu nghia cua tu

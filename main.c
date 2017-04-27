@@ -43,19 +43,20 @@ int main(int argc,char *argv[]){
   // Khoi tao giao dien
   gtk_init(&argc,&argv);
   //neu anh co them data thi them o day nhe!
-  char word[MAXLEN], mean[MAXLEN],btree_filename[10]="testBTree";
+  char word[MAXLEN], mean[MAXLEN],btree_filename[100]="btIndex/test";
   FILE *f;  
 
   btinit();
   //co the truyen file text theo tham so dong lenh:
-  if(argc >= 3) {
+  if(argc >= 2) {
     strcpy(source_text_filename,argv[1]);
-    strcpy(btree_filename,argv[2]);
+    strcpy(btree_filename,createBtreeFilename(source_text_filename));
   }
+
   data = btopn(btree_filename,0,0);   
   if(data == NULL) data = btcrt(btree_filename,0,FALSE);  
   f=fopen(source_text_filename,"r");
-  if(!f) {printf("Cannot open file %s \n",source_text_filename );exit(1);}
+  if(!f) {printf("Cannot open source file: %s \n",source_text_filename );exit(1);}
   while(!feof(f)) {
       fscanf(f,"%[^#]#%[^\n]\n",word,mean);
       AddWordToDic(data,word,mean);
