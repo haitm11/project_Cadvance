@@ -9,7 +9,7 @@
 #include "dialog.h"
 #define MAXLEN 100
 
-BTA *data;
+BTA *data,*sou;
 GtkWidget *textView,*mainwindow;
 GtkTextBuffer *buffer;
 char source_text_filename[100]="test.txt";
@@ -43,7 +43,7 @@ int main(int argc,char *argv[]){
   // Khoi tao giao dien
   gtk_init(&argc,&argv);
   //neu anh co them data thi them o day nhe!
-  char word[MAXLEN], mean[MAXLEN],btree_filename[100]="btIndex/test";
+  char word[MAXLEN], mean[MAXLEN],am[50],btree_filename[50]="btIndex/test",sou_btree_filename[50]="btIndex/testsou";
   FILE *f;  
 
   btinit();
@@ -51,15 +51,22 @@ int main(int argc,char *argv[]){
   if(argc >= 2) {
     strcpy(source_text_filename,argv[1]);
     strcpy(btree_filename,createBtreeFilename(source_text_filename));
+    strcpy(sou_btree_filename,createBtreeFilenameSou(source_text_filename));
   }
 
-  data = btopn(btree_filename,0,0);   
-  if(data == NULL) data = btcrt(btree_filename,0,FALSE);  
+  data = btopn(btree_filename,0,0);
+  sou = btopn(sou_btree_filename,0,0);   
+  if(data == NULL) data = btcrt(btree_filename,0,FALSE);
+  if(sou == NULL) sou = btcrt(sou_btree_filename,0,FALSE); 
+  if(data == NULL||sou==NULL) exit(1);
+  
   f=fopen(source_text_filename,"r");
   if(!f) {printf("Cannot open source file: %s \n",source_text_filename );exit(1);}
   while(!feof(f)) {
       fscanf(f,"%[^#]#%[^\n]\n",word,mean);
       AddWordToDic(data,word,mean);
+      soundEx(am,word,50,1);
+      AddWordToSou(sou,am,word);
     }
   fclose(f);
 
