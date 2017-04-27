@@ -92,6 +92,8 @@ int main(int argc,char *argv[]){
   gtk_entry_set_completion(GTK_ENTRY(entry),completion);
   g_signal_connect(entry,"activate",G_CALLBACK(display),NULL);
   g_signal_connect(entry,"key-press-event",G_CALLBACK(searchword),liststore);
+  g_signal_connect_after( entry, "insert-text", G_CALLBACK(name_insert_after), liststore );
+  g_signal_connect_after( entry, "delete-text", G_CALLBACK(name_delete_after), liststore );
   gtk_box_pack_start(GTK_BOX(hbox),entry,TRUE,TRUE,0);
 
   GtkSettings *default_settings=gtk_settings_get_default();
