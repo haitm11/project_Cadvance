@@ -80,8 +80,8 @@ char* createBtreeFilenameSou(){
   return strcat(str,"sou");
 }
 gboolean insert_word(GtkWidget *widget,gpointer entry){
-  GtkWidget *dialog,*window=mainwindow;
-  char word[MAXLEN],meaning[MAXLEN],am[50];
+  GtkWidget *dialog,*d,*window=mainwindow;
+  char word[MAXLEN],meaning[MAXLEN],omeaning[MAXLEN],am[50];
   GtkTextIter start,end;
   strcpy(word,(char*)gtk_entry_get_text(GTK_ENTRY(entry)));
   gtk_text_buffer_get_start_iter(buffer,&start);
@@ -91,12 +91,26 @@ gboolean insert_word(GtkWidget *widget,gpointer entry){
     dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_OK,"Bạn chưa nhập tên!");
     gtk_window_set_title(GTK_WINDOW(dialog),"Lỗi!");
     gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
   }  
   else{
   	int rsize;
-  	if(btsel(data,word,meaning,MAXLEN*sizeof(char),&rsize)==0) {
-      	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_QUESTION,GTK_BUTTONS_YES_NO,"Tên đã có trong cơ sở dữ liệu!");
+  	if(btsel(data,word,omeaning,MAXLEN*sizeof(char),&rsize)==0) {
+      dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_QUESTION,GTK_BUTTONS_YES_NO,"Tên đã có trong cơ sở dữ liệu! Cập nhật ?");
     	gtk_window_set_title(GTK_WINDOW(dialog),"Trùng tên");
+      if (gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_YES) {
+          btupd(data,word,meaning,MAXLEN*sizeof(char));
+          FileDeleteRow(source_text_filename,word);         
+          FILE *file = fopen(source_text_filename,"r+");
+          fseek(file, 0, SEEK_END);
+          fprintf(file,"%s#%s\n",word,meaning);
+          fclose(file);
+          gtk_widget_destroy(dialog);
+          d=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_INFO,GTK_BUTTONS_OK,"Tên đã được cập nhật !");
+          gtk_window_set_title(GTK_WINDOW(d),"Success");
+          gtk_dialog_run(GTK_DIALOG(d)); gtk_widget_destroy(d);
+      }
+      else gtk_widget_destroy(dialog);
     } 
     else{
     	dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_QUESTION,GTK_BUTTONS_YES_NO,"Bạn muốn thêm tên này vào cơ sở dữ liệu?");
@@ -109,20 +123,26 @@ gboolean insert_word(GtkWidget *widget,gpointer entry){
 	        fseek(file, 0, SEEK_END);
 	        fprintf(file,"%s#%s\n",word,meaning);
 	        fclose(file);
+          gtk_widget_destroy(dialog);
+          d=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_INFO,GTK_BUTTONS_OK,"Tên đã được thêm!");
+          gtk_window_set_title(GTK_WINDOW(d),"Success");
+          gtk_dialog_run(GTK_DIALOG(d)); gtk_widget_destroy(d);
 	    }
+      else gtk_widget_destroy(dialog);
     }  
   }
-  gtk_widget_destroy(dialog);
+  
 }
 
 gboolean delete_word(GtkWidget *widget, gpointer entry){
-  GtkWidget *dialog,*window=mainwindow;
+  GtkWidget *dialog,*d,*window=mainwindow;
   char word[MAXLEN],meaning[MAXLEN],am[50],s[100];
   strcpy(word,(char*)gtk_entry_get_text(GTK_ENTRY(entry)));
   if (strlen(word) == 0){
     dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_OK,"Bạn chưa nhập tên!");
     gtk_window_set_title(GTK_WINDOW(dialog),"Lỗi!");
     gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
   }  
   else{
   	int rsize;
@@ -130,7 +150,8 @@ gboolean delete_word(GtkWidget *widget, gpointer entry){
       dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_QUESTION,GTK_BUTTONS_YES_NO,"Bạn muốn xóa tên này khỏi cơ sở dữ liệu?");
     	gtk_window_set_title(GTK_WINDOW(dialog),"Xác nhận");
     	if (gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_YES) {
-	      	if(btdel(data, word) == 0) {
+	      	gtk_widget_destroy(dialog);
+          if(btdel(data, word) == 0) {
 	          FileDeleteRow(source_text_filename,word);
             soundEx(am,word,50,1); 
 
@@ -149,18 +170,23 @@ gboolean delete_word(GtkWidget *widget, gpointer entry){
               else
                 btupd(sou,am,s,MAXLEN*sizeof(char));
             }
-    	    }	        
+            
+            d=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_INFO,GTK_BUTTONS_OK,"Tên đã được xóa !");
+            gtk_window_set_title(GTK_WINDOW(d),"Success");
+            gtk_dialog_run(GTK_DIALOG(d)); gtk_widget_destroy(d);
+    	    }        
 	        gtk_text_buffer_set_text(buffer,"",-1);
       		gtk_entry_set_text(GTK_ENTRY(entry),"");
 	    }
+      else gtk_widget_destroy(dialog);
     } 
     else{	    
 	    dialog=gtk_message_dialog_new(GTK_WINDOW(window),GTK_DIALOG_DESTROY_WITH_PARENT,GTK_MESSAGE_WARNING,GTK_BUTTONS_OK,"Tên không có trong cơ sở dữ liệu!");
     	gtk_window_set_title(GTK_WINDOW(dialog),"Lỗi!");
     	gtk_dialog_run(GTK_DIALOG(dialog));
+      gtk_widget_destroy(dialog);
     }
-  }
-  gtk_widget_destroy(dialog);
+  }  
   return FALSE;
 }
 gboolean search_word(GtkWidget *button,gpointer database){

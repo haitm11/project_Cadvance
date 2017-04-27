@@ -1,11 +1,9 @@
-black#mau den
 angle#thien than
 i#toi
 my#cua toi
 hung#cao thu vo lam
 hello#xin chao
 ga Balotely#cu xon toay
-ga#cao thu vo lam
 ngu#kho tinh
 nguyen dinh hunga#hunga
 
@@ -28,3 +26,5 @@ nguyenb#nguyenb
 nguyena#nguyena
 
 me#nguoi me viet nam
+black#mau den
+ga#ag
