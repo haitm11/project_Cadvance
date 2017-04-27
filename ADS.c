@@ -170,6 +170,8 @@ gboolean search_word(GtkWidget *button,gpointer database){
 
 gboolean delete_event(GtkWidget *widget,GdkEvent *event,gpointer database){
     gtk_main_quit();
+    btcls(data);
+    btcls(sou);
     printf("End!\n");
     return FALSE;
 }

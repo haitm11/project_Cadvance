@@ -1,5 +1,8 @@
 #include "extern.h"
 int AddWordToDic(BTA *Dic,char *w,char *m);
+int AddWordToSou(BTA *Dic,char *w,char *m);
+char* createBtreeFilename();
+char* createBtreeFilenameSou();
 void FileDeleteRow(char* filename,char* word);
 gboolean insert_word(GtkWidget *widget,gpointer entry);
 gboolean delete_word(GtkWidget *widget,gpointer entry);
