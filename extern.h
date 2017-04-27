@@ -1,5 +1,5 @@
-#include<gtk/gtk.h>
-#include"btree.h"
+#include <gtk/gtk.h>
+#include "inc/btree.h"
 
 extern BTA* data;
 extern GtkWidget *textView,*mainwindow;

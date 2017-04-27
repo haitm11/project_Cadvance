@@ -1,4 +1,4 @@
-#include"extern.h"
+#include "extern.h"
 int AddWordToDic(BTA *Dic,char *w,char *m);
 void FileDeleteRow(char* filename,char* word);
 gboolean insert_word(GtkWidget *widget,gpointer entry);

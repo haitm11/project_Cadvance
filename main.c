@@ -1,9 +1,9 @@
 #include <gtk/gtk.h>
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "btree.h"
 #include <string.h>
+#include <unistd.h>
+#include "inc/btree.h"
 #include "ADS.h"
 #include "SAD.h"
 #include "dialog.h"
@@ -67,7 +67,7 @@ int main(int argc,char *argv[]){
   gtk_container_set_border_width(GTK_CONTAINER(window),10);
   gtk_window_set_title(GTK_WINDOW(window),"Từ điển tên - email");
   gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
-  gtk_window_set_icon(GTK_WINDOW(window),create_pixbuf("main.png"));
+  gtk_window_set_icon(GTK_WINDOW(window),create_pixbuf("images/main.png"));
   g_signal_connect(window,"delete-event",G_CALLBACK(delete_event),NULL);
   mainwindow=window;
   // Ket thuc khoi tao
@@ -99,7 +99,7 @@ int main(int argc,char *argv[]){
   GtkSettings *default_settings=gtk_settings_get_default();
   g_object_set(default_settings,"gtk-button-images",TRUE,NULL);
 
-  button=gtk_button_with_icon_and_label("Tra cứu","search.ico");
+  button=gtk_button_with_icon_and_label("Tra cứu","images/search.ico");
   g_signal_connect(button,"clicked",G_CALLBACK(search_word),(gpointer)entry);
   gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,0);
 
@@ -111,19 +111,19 @@ int main(int argc,char *argv[]){
   hbox=gtk_box_new(GTK_ORIENTATION_HORIZONTAL,0);
   vbox=gtk_box_new(TRUE,1);
 
-  ins=gtk_button_with_icon_and_label("Thêm từ","add.ico");
+  ins=gtk_button_with_icon_and_label("Thêm từ","images/add.ico");
   g_signal_connect(ins,"clicked",G_CALLBACK(insert_word),(gpointer)entry);
 
-  del=gtk_button_with_icon_and_label("Xóa từ","delete.ico");
+  del=gtk_button_with_icon_and_label("Xóa từ","images/delete.ico");
   g_signal_connect(del,"clicked",G_CALLBACK(delete_word),(gpointer)entry);
 
-  gui=gtk_button_with_icon_and_label("Hướng dẫn","huongdan.ico");
+  gui=gtk_button_with_icon_and_label("Hướng dẫn","images/huongdan.ico");
   g_signal_connect(gui,"clicked",G_CALLBACK(show_guide),(gpointer)entry);
 
-  info=gtk_button_with_icon_and_label("Thông tin","thongtin.png");
+  info=gtk_button_with_icon_and_label("Thông tin","images/thongtin.png");
   g_signal_connect(info,"clicked",G_CALLBACK(show_info),(gpointer)entry);
 
-  clear=gtk_button_with_icon_and_label("Khôi phục","clear.png");
+  clear=gtk_button_with_icon_and_label("Khôi phục","images/clear.png");
   g_signal_connect(clear,"clicked",G_CALLBACK(clearAll),(gpointer)entry);
 
   gtk_box_pack_start(GTK_BOX(vbox),ins,TRUE,TRUE,0);
@@ -138,7 +138,7 @@ int main(int argc,char *argv[]){
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledWindow),GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
   textView=gtk_text_view_new();
   gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(textView),GTK_WRAP_WORD);
-  printf("xin chao!");
+  printf("Start!\n");
   buffer=gtk_text_view_get_buffer(GTK_TEXT_VIEW(textView));
   gtk_text_buffer_set_text(buffer,"Xin chào!",-1);
   gtk_container_add(GTK_CONTAINER(scrolledWindow),textView);
