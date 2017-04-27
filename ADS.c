@@ -19,7 +19,7 @@ int AddWordToSou(BTA *Dic,char *w,char *m)
     char om[MAXLEN];
     if(btsel(Dic,w,om,MAXLEN*sizeof(char),&rsize)==0) {
         
-        if(strlen(om)+strlen(m)<MAXLEN){
+        if(strstr(om,m)==NULL && (strlen(om)+strlen(m))<MAXLEN){
           strcat(om,"\n");
           strcat(om,m);
           btupd(Dic,w,om,MAXLEN*sizeof(char));
